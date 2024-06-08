@@ -31,8 +31,8 @@ Sound fxCoin = { 0 };
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static const int screenWidth = 1300;
+static const int screenHeight = 726;
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -40,6 +40,8 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
+
+static bool JumpToGameplay = true;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -59,7 +61,7 @@ int main(void)
 {
     // Initialization
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib game template");
+    InitWindow(screenWidth, screenHeight, "Rogue Star");
 
     InitAudioDevice();      // Initialize audio device
 
@@ -72,8 +74,15 @@ int main(void)
     PlayMusicStream(music);
 
     // Setup and init first screen
-    currentScreen = LOGO;
-    InitLogoScreen();
+
+    if (JumpToGameplay) {
+        currentScreen = GAMEPLAY;
+        InitGameplayScreen();
+    }
+    else {
+         currentScreen = LOGO;
+         InitLogoScreen();
+    }
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
