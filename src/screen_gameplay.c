@@ -124,10 +124,17 @@ Texture2D StarFieldTexture = { 0 };
 Texture2D NebulaTexture = { 0 };
 Shader shader = { 0 };
 
+float  PointA_X = 0.0f;
+float  PointA_Y = 0.0f;
+float  PointB_X = 0.0f;
+float  PointB_Y = 0.0f;
+bool isPointA = true;
+
 static float time = 0.0f;
 static int timeLoc = 0;
 static int worldPosLoc = 0;
 static int divisionsLoc = 0;
+static Vector2 predictedPosition = { 0.0f, 0.0f };
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -154,6 +161,31 @@ Image GenImageWhiteNoiseAlphaBG(int width, int height, float factor)
     return image;
 }
 
+
+void CreateMewEngineParticle()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		if (particles[i].alpha <= 0)
+		{
+			particles[i].position = (Vector2){ position.x - 20 * cosf(Direction), position.y - GetRandomValue(-10, 10) * sinf(Direction) };
+			particles[i].speed = (Vector2){ speed.x, speed.y };
+			particles[i].radius = 4.0f;
+			particles[i].rotation = 0.0f;
+			particles[i].alpha = 1.0f;
+			particles[i].color = RED;
+			break;
+		}
+	}
+}
+
+void PredictPlayerPositionInTime(float time)
+{
+	predictedPosition = position;
+	predictedPosition.x += speed.x * time;
+	predictedPosition.y += speed.y * time;
+}
+
 // Gameplay Screen Initialization logic
 void InitGameplayScreen(void)
 {
@@ -162,9 +194,9 @@ void InitGameplayScreen(void)
     StarFieldTexture = LoadTextureFromImage(ImBlank);  // Load blank texture to fill on shader
     UnloadImage(ImBlank);
 
-    ImBlank = GenImagePerlinNoise(GetScreenWidth() * 4, GetScreenHeight() * 4, 50, 50, 1.0f);
-    NebulaTexture = LoadTextureFromImage(ImBlank);  // Load blank texture to fill on shader
-    UnloadImage(ImBlank);
+    //ImBlank = GenImagePerlinNoise(GetScreenWidth() * 4, GetScreenHeight() * 4, 50, 50, 1.0f);
+    //NebulaTexture = LoadTextureFromImage(ImBlank);  // Load blank texture to fill on shader
+    //UnloadImage(ImBlank);
 
     char* WorkingDir = GetWorkingDirectory();
     //print working dir
@@ -199,7 +231,7 @@ void InitGameplayScreen(void)
     planet.position = (Vector2){ GetScreenWidth()/2, GetScreenHeight()/2 };
     planet.radius = 50.0f;
     planet.color = BLUE;
-    planet.gravity = 9999.0f;
+    planet.gravity = 0.5f;
 
     //init moon
     moon.position = (Vector2){ GetScreenWidth()/2 + 200, GetScreenHeight()/2 + 200 };
@@ -212,7 +244,9 @@ void InitGameplayScreen(void)
     Vector2 tangent = (Vector2){-direction.y, direction.x};
     moonSpeed = Vector2Scale(tangent, 0.1f);
 
+    int GridDistance = 100;
 
+    int GridLines = 100;
 
     DisableCursor();    // Disable cursor for better gameplay experience
 
@@ -242,26 +276,89 @@ void UpdateGameplayScreen(void)
     if (camera.zoom > 3.0f) camera.zoom = 3.0f;
     else if (camera.zoom < 0.1f) camera.zoom = 0.1f;
 
-
-    if (IsKeyDown(KEY_W) && !isDead) 
+    if (!isDead)
     {
-        speed.x += Acceleration * cosf(Direction) * deltaTime;
-        speed.y += Acceleration * sinf(Direction) * deltaTime;
-        // create new particle and add to array
-        for(int i = 0; i < 100; i++)
+        //player movement
+        if (IsKeyDown(KEY_W))
+        {
+            speed.x += Acceleration * cosf(Direction) * deltaTime;
+            speed.y += Acceleration * sinf(Direction) * deltaTime;
+            // create new particle and add to array
+           CreateMewEngineParticle();
+        }
+        //if space, apply brakes, use deltatime to slow down
+        if (IsKeyDown(KEY_SPACE))
 		{
-			if(particles[i].alpha <= 0)
-			{
-				particles[i].position = (Vector2){position.x - 20 * cosf(Direction), position.y - GetRandomValue(-10, 10) * sinf(Direction)};
-				particles[i].speed = (Vector2){speed.x, speed.y};
-				particles[i].radius = 4.0f;
-				particles[i].rotation = 0.0f;
-				particles[i].alpha = 1.0f;
-				particles[i].color = RED;
-				break;
-			}
+			speed.x -= speed.x * deltaTime;
+			speed.y -= speed.y * deltaTime;
 		}
+
+		//if left shift, apply boost
+		if (IsKeyDown(KEY_LEFT_SHIFT))
+		{
+			speed.x += Acceleration * 2 * cosf(Direction) * deltaTime;
+			speed.y += Acceleration * 2 * sinf(Direction) * deltaTime;
+			// create new particle and add to array
+			CreateMewEngineParticle();
+		}
+
+		//if left control, apply reverse
+		if (IsKeyDown(KEY_LEFT_CONTROL))
+		{
+			speed.x -= Acceleration * cosf(Direction) * deltaTime;
+			speed.y -= Acceleration * sinf(Direction) * deltaTime;
+			// create new particle and add to array
+			CreateMewEngineParticle();
+		}
+
+		//if left control, apply reverse
+		if (IsKeyDown(KEY_S))
+		{
+			speed.x -= Acceleration * cosf(Direction) * deltaTime;
+			speed.y -= Acceleration * sinf(Direction) * deltaTime;
+			// create new particle and add to array
+			CreateMewEngineParticle();
+		}
+
+		//if left control, apply reverse
+		if (IsKeyDown(KEY_S))
+		{
+			speed.x -= Acceleration * cosf(Direction) * deltaTime;
+			speed.y -= Acceleration * sinf(Direction) * deltaTime;
+			// create new particle and add to array
+			CreateMewEngineParticle();
+		}
+
+		//if left control, apply reverse
+		if (IsKeyDown(KEY_S))
+		{
+			speed.x -= Acceleration * cosf(Direction) * deltaTime;
+			speed.y -= Acceleration * sinf(Direction) * deltaTime;
+			// create new particle and add to array
+			CreateMewEngineParticle();
+		}
+
+		//if left control, apply reverse
+		if (IsKeyDown(KEY_S))
+		{
+			speed.x -= Acceleration * cosf(Direction) * deltaTime;
+			speed.y -= Acceleration * sinf(Direction) * deltaTime;
+			// create new particle and add to array
+			CreateMewEngineParticle();
+		}
+
+		//if left control, apply reverse
+		if (IsKeyDown(KEY_S))
+		{
+			speed.x -= Acceleration * cosf(Direction) * deltaTime;
+			speed.y -= Acceleration * sinf(Direction) * deltaTime;
+			// create new particle and add
+		}
+
+       
+
     }
+   
 
     // update particles
     for(int i = 0; i < MAX_STARS; i++)
@@ -336,7 +433,18 @@ void UpdateGameplayScreen(void)
         {
             // create new missile and add to array
             MissileCooldown = MissileFireRate;
+            if (isPointA)
+            {
+                PointA_X = GetMouseX();
+                PointA_Y = GetMouseY();
+            }
+            else
+            {
+                PointB_X = GetMouseX();
+                PointB_Y = GetMouseY();
+            }
 
+            isPointA = !isPointA;
 
             for (int i = 0; i < 10; i++)
             {
@@ -352,6 +460,8 @@ void UpdateGameplayScreen(void)
                 }
             }
         }
+
+
 
     // check if overlap with planet, if collided with planet, reverse speed
     if (CheckCollisionCircleRec(planet.position, planet.radius, (Rectangle){position.x, position.y, 20, 20}))
@@ -399,6 +509,8 @@ void UpdateGameplayScreen(void)
     //calculate time dilation
     LightSpeedPercentage = 1; 
     TimeDilation = 1;
+
+    PredictPlayerPositionInTime(100.0f);
 }
 
 // Gameplay Screen Draw logic
@@ -415,7 +527,7 @@ void DrawGameplayScreen(void)
 
     BeginMode2D(camera);
     BeginBlendMode(BLEND_ALPHA);
-    DrawTexture(NebulaTexture, -2 * GetScreenWidth(), -2 * GetScreenHeight(), PURPLE);  // Drawing BLANK texture, all magic happens on shader
+   // DrawTexture(NebulaTexture, -2 * GetScreenWidth(), -2 * GetScreenHeight(), PURPLE);  // Drawing BLANK texture, all magic happens on shader
     //DrawTexture
 
     Vector2 offset = { 20 *  GetScreenWidth() / 2, 20 * GetScreenHeight() / 2 };
@@ -424,6 +536,24 @@ void DrawGameplayScreen(void)
 
     DrawTexturePro(StarFieldTexture, source, Scalesource, offset, 0.0f, WHITE);
     EndBlendMode();
+
+    //draw background grid
+    for(int i = -100; i < 100; i++)
+		{
+
+        Color color = (i % 5 == 0) ? DARKGRAY : GRAY;
+        color = i == 0 ? RED : color;
+
+		DrawLine(i * 100, -10 * GetScreenHeight(), i * 100, 20 * GetScreenHeight(), color);
+		DrawLine(- 10 * GetScreenWidth(), i * 100, 20 * GetScreenWidth(), i * 100, color);
+		}
+
+    Vector2 PointA = { PointA_X, PointA_Y };
+    Vector2 PointB = { PointB_X, PointB_Y };
+    DrawLineEx(PointA, PointB, 5, RED);
+
+    //draw line between point a and point b
+   // DrawLineEx({ PointA_X, PointA_Y }, { (PointB_X, PointB_Y) }, 5, RED);
 
     // TODO: Draw GAMEPLAY screen here!
 
@@ -445,10 +575,10 @@ void DrawGameplayScreen(void)
 
        DrawTriangle(PlayerTri[0], PlayerTri[2], PlayerTri[1], WHITE);
 
+       //draw diamont at predicted position
+       DrawCircleV(predictedPosition, 10, RED);
+
 	}
-
- 
-
 
 
     //draw planet
@@ -481,10 +611,19 @@ void DrawGameplayScreen(void)
     }
     //draw healthbar
     DrawRectangle(20, 40, Health * 2, 20, GREEN);
+  
 
-    //draw time dilation
-    DrawText(TextFormat("Time Dilation: %f", TimeDilation), 20, 60, 20, RED);
-    DrawText(TextFormat("CURRENT FPS: %i", (int)(1.0f / GetFrameTime())), GetScreenWidth() - 220, 40, 20, GREEN);
+    //Draw mouse grid coordinates
+    DrawText(TextFormat("Mouse Grid Integer: %i, %i", GetMouseX() / 100, GetMouseY() / -100), 20, 80, 40, RED);
+    //Draw mouse grid float coordinates
+    DrawText(TextFormat("Mouse Grid Float: %f, %f", (float)GetMouseX() / 100, (float)GetMouseY() / -100), 20, 140, 40, RED);
+    //calculate length of line in grid space and print it
+    float length = sqrtf(powf((PointB_X - PointA_X), 2) + powf((PointB_Y - PointA_Y), 2));
+    DrawText(TextFormat("Line Length: %f", length / 100), 20, 180, 40, RED);
+    //draw position of player in grid space
+    DrawText(TextFormat("Player Grid: %f, %f", position.x / 100, position.y / -100), 20, 220, 40, RED);
+
+
 }
 
 // Gameplay Screen Unload logic

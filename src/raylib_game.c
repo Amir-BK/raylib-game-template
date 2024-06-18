@@ -61,7 +61,7 @@ int main(void)
 {
     // Initialization
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "Rogue Star");
+    InitWindow(screenWidth, screenHeight, "Raylib Template");
 
     InitAudioDevice();      // Initialize audio device
 

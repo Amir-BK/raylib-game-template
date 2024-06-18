@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raylib", "raylib\raylib.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raylib_game", "raylib_game\raylib_game.vcxproj", "{0981CA98-E4A5-4DF1-987F-A41D09131EFC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RogueStar", "..\..\..\RogueStar\projects\VS2022\RogueStar\RogueStar.vcxproj", "{4384889A-3909-4FBC-82ED-B5018BC5B070}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug.DLL|x64 = Debug.DLL|x64
@@ -51,6 +53,22 @@ Global
 		{0981CA98-E4A5-4DF1-987F-A41D09131EFC}.Release|x64.Build.0 = Release|x64
 		{0981CA98-E4A5-4DF1-987F-A41D09131EFC}.Release|x86.ActiveCfg = Release|Win32
 		{0981CA98-E4A5-4DF1-987F-A41D09131EFC}.Release|x86.Build.0 = Release|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug.DLL|x64.ActiveCfg = Debug.DLL|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug.DLL|x64.Build.0 = Debug.DLL|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug.DLL|x86.ActiveCfg = Debug.DLL|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug.DLL|x86.Build.0 = Debug.DLL|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug|x64.ActiveCfg = Debug|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug|x64.Build.0 = Debug|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug|x86.ActiveCfg = Debug|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Debug|x86.Build.0 = Debug|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release.DLL|x64.ActiveCfg = Release.DLL|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release.DLL|x64.Build.0 = Release.DLL|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release.DLL|x86.ActiveCfg = Release.DLL|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release.DLL|x86.Build.0 = Release.DLL|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release|x64.ActiveCfg = Release|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release|x64.Build.0 = Release|x64
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release|x86.ActiveCfg = Release|Win32
+		{4384889A-3909-4FBC-82ED-B5018BC5B070}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
